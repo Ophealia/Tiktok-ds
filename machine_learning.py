@@ -19,7 +19,7 @@ def prepare_features(df):
     ]
 
     X = df[features]
-    y = df['like_type']
+    y = df["like_type"]
 
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
@@ -47,14 +47,14 @@ def train_and_evaluate_model(X, y, features):
     print("Classification Report:")
     print(classification_report(y_test, y_pred))
 
-    cv_scores = cross_val_score(model, X, y, cv=5, scoring='accuracy')
+    cv_scores = cross_val_score(model, X, y, cv=5, scoring="accuracy")
     print("Cross-Validation Accuracy Scores:", cv_scores)
     print("Mean CV Accuracy:", cv_scores.mean())
 
     importances = model.feature_importances_
     feature_names = features 
-    feature_importance_df = pd.DataFrame({'Feature': feature_names, 'Importance': importances})
-    print(feature_importance_df.sort_values(by='Importance', ascending=False))
+    feature_importance_df = pd.DataFrame({"Feature": feature_names, "Importance": importances})
+    print(feature_importance_df.sort_values(by="Importance", ascending=False))
 
 
 if __name__ == "__main__":

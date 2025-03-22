@@ -15,34 +15,34 @@ def clean_data(df):
     return df
 
 def feature_engineering(df, save_path=None):
-    df['time'] = pd.to_datetime(df['time'])
-    df['hour'] = df['time'].dt.hour
-    df['date'] = df['time'].dt.date
-    df['dayofweek'] = df['time'].dt.dayofweek
-    df['is_weekend'] = df['dayofweek'].apply(lambda x: 1 if x >= 5 else 0)
+    df["time"] = pd.to_datetime(df["time"])
+    df["hour"] = df["time"].dt.hour
+    df["date"] = df["time"].dt.date
+    df["dayofweek"] = df["time"].dt.dayofweek
+    df["is_weekend"] = df["dayofweek"].apply(lambda x: 1 if x >= 5 else 0)
     
     def categorize_hour(hour):
         if 6 <= hour < 12:
-            return 'morning'
+            return "morning"
         elif 12 <= hour < 18:
-            return 'afternoon'
+            return "afternoon"
         elif 18 <= hour < 24:
-            return 'evening'
+            return "evening"
         else:
-            return 'night'
+            return "night"
         
-    df['time_period'] = df['hour'].apply(categorize_hour)
-    df['video_category_num'] = df['video_category'].astype('category').cat.codes
-    df["time_period_num"] = df["time_period"].astype('category').cat.codes
+    df["time_period"] = df["hour"].apply(categorize_hour)
+    df["video_category_num"] = df["video_category"].astype("category").cat.codes
+    df["time_period_num"] = df["time_period"].astype("category").cat.codes
     
-    df['total_action'] = df['like_type'] + df['relay_type']
+    df["total_action"] = df["like_type"] + df["relay_type"]
     
     user_stats = df.groupby("user_id").agg(
         total_views=("video_id", "count"), 
         like_ratio=("like_type", "mean") 
     ).reset_index()
 
-    df['user_category_like_ratio'] = df.groupby(['user_id', 'video_category_num'])['like_type'].transform('mean')
+    df["user_category_like_ratio"] = df.groupby(["user_id", "video_category_num"])["like_type"].transform("mean")
 
     
     video_stats = df.groupby("video_id").agg(
